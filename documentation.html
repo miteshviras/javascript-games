@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game Code Explanation</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .code-block {
+            background-color: #e9ecef;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Snake Game Code Explanation</h1>
+        <p>This document explains the code for a simple Snake Game implemented using HTML, CSS, and JavaScript. The game uses an SVG element to render the snake and food.</p>
+
+        <h2>HTML Structure</h2>
+        <div class="code-block">
+            <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+    &lt;title&gt;Snake Game&lt;/title&gt;
+    &lt;link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"&gt;
+    &lt;style&gt;
+        #gameSvg {
+            border: 1px solid black;
+            background-color: #f8f9fa;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;div class="container text-center mt-5"&gt;
+        &lt;h1&gt;Snake Game&lt;/h1&gt;
+        &lt;svg id="gameSvg" width="600" height="600"&gt;&lt;/svg&gt;
+        &lt;div class="mt-3"&gt;
+            &lt;button class="btn btn-primary" onclick="startGame()"&gt;Start Game&lt;/button&gt;
+            &lt;button class="btn btn-secondary" onclick="showTutorial()"&gt;Tutorial&lt;/button&gt;
+        &lt;/div&gt;
+        &lt;div class="mt-3"&gt;
+            &lt;h3&gt;Score: &lt;span id="score"&gt;0&lt;/span&gt;&lt;/h3&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;!-- Tutorial Modal --&gt;
+    &lt;div class="modal" tabindex="-1" role="dialog" id="tutorialModal"&gt;
+        &lt;div class="modal-dialog" role="document"&gt;
+            &lt;div class="modal-content"&gt;
+                &lt;div class="modal-header"&gt;
+                    &lt;h5 class="modal-title"&gt;How to Play&lt;/h5&gt;
+                    &lt;button type="button" class="close" data-dismiss="modal" aria-label="Close"&gt;
+                        &lt;span aria-hidden="true"&gt;&times;&lt;/span&gt;
+                    &lt;/button&gt;
+                &lt;/div&gt;
+                &lt;div class="modal-body"&gt;
+                    &lt;p&gt;Use the arrow keys to move the snake. Eat the red food to grow and increase your score. Avoid running into the walls or yourself!&lt;/p&gt;
+                &lt;/div&gt;
+                &lt;div class="modal-footer"&gt;
+                    &lt;button type="button" class="btn btn-primary" data-dismiss="modal"&gt;Got it!&lt;/button&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+
+    &lt;script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"&gt;&lt;/script&gt;
+    &lt;script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"&gt;&lt;/script&gt;
+    &lt;script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+        </div>
+        <p>The HTML structure includes a container for the game, buttons to start the game and show the tutorial, and a modal for the tutorial instructions. The game is rendered inside an SVG element with the ID <code>gameSvg</code>.</p>
+
+        <h2>JavaScript Code</h2>
+        <div class="code-block">
+            <pre><code>&lt;script&gt;
+const svg = document.getElementById('gameSvg');
+const box = 30;
+let snake = [{ x: 9 * box, y: 10 * box }];
+let direction = 'RIGHT';
+let food = {
+    x: Math.floor(Math.random() * 20 + 1) * box,
+    y: Math.floor(Math.random() * 20 + 1) * box
+};
+let score = 0;
+let game;
+
+document.addEventListener('keydown', changeDirection);
+svg.addEventListener('click', changeDirection);
+
+function changeDirection(event) {
+    if (event.type === 'keydown') {
+        if (event.keyCode == 37 && direction != 'RIGHT') direction = 'LEFT';
+        else if (event.keyCode == 38 && direction != 'DOWN') direction = 'UP';
+        else if (event.keyCode == 39 && direction != 'LEFT') direction = 'RIGHT';
+        else if (event.keyCode == 40 && direction != 'UP') direction = 'DOWN';
+    } else if (event.type === 'click') {
+        const rect = svg.getBoundingClientRect();
+        const clickX = event.clientX - rect.left;
+        const clickY = event.clientY - rect.top;
+        const head = snake[0];
+
+        if (clickX < head.x && direction != 'RIGHT') direction = 'LEFT';
+        else if (clickX > head.x && direction != 'LEFT') direction = 'RIGHT';
+        else if (clickY < head.y && direction != 'DOWN') direction = 'UP';
+        else if (clickY > head.y && direction != 'UP') direction = 'DOWN';
+    }
+}
+
+function draw() {
+    while (svg.firstChild) {
+        svg.removeChild(svg.firstChild);
+    }
+
+    for (let i = 0; i < snake.length; i++) {
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('x', snake[i].x);
+        rect.setAttribute('y', snake[i].y);
+        rect.setAttribute('width', box);
+        rect.setAttribute('height', box);
+        rect.setAttribute('fill', (i == 0) ? 'green' : 'white');
+        rect.setAttribute('stroke', 'red');
+        svg.appendChild(rect);
+    }
+
+    const foodRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    foodRect.setAttribute('x', food.x);
+    foodRect.setAttribute('y', food.y);
+    foodRect.setAttribute('width', box);
+    foodRect.setAttribute('height', box);
+    foodRect.setAttribute('fill', 'red');
+    svg.appendChild(foodRect);
+
+    let snakeX = snake[0].x;
+    let snakeY = snake[0].y;
+
+    if (direction == 'LEFT') snakeX -= box;
+    if (direction == 'UP') snakeY -= box;
+    if (direction == 'RIGHT') snakeX += box;
+    if (direction == 'DOWN') snakeY += box;
+
+    if (snakeX == food.x && snakeY == food.y) {
+        score++;
+        document.getElementById('score').innerText = score;
+        localStorage.setItem('highScore', Math.max(score, localStorage.getItem('highScore') || 0));
+        food = {
+            x: Math.floor(Math.random() * 20 + 1) * box,
+            y: Math.floor(Math.random() * 20 + 1) * box
+        };
+    } else {
+        snake.pop();
+    }
+
+    let newHead = {
+        x: snakeX,
+        y: snakeY
+    };
+
+    if (snakeX < 0 || snakeY < 0 || snakeX >= svg.width.baseVal.value || snakeY >= svg.height.baseVal.value || collision(newHead, snake)) {
+        clearInterval(game);
+        alert('Game Over! Your score is ' + score + '. High score is ' + localStorage.getItem('highScore'));
+    }
+
+    snake.unshift(newHead);
+}
+
+function collision(head, array) {
+    for (let i = 0; i < array.length; i++) {
+        if (head.x == array[i].x && head.y == array[i].y) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function startGame() {
+    snake = [{ x: 9 * box, y: 10 * box }];
+    direction = 'RIGHT';
+    food = {
+        x: Math.floor(Math.random() * 20 + 1) * box,
+        y: Math.floor(Math.random() * 20 + 1) * box
+    };
+    score = 0;
+    document.getElementById('score').innerText = score;
+    clearInterval(game);
+    game = setInterval(draw, 100);
+}
+
+function showTutorial() {
+    $('#tutorialModal').modal('show');
+}
+
+window.onload = function() {
+    if (!localStorage.getItem('tutorialShown')) {
+        $('#tutorialModal').modal('show');
+        localStorage.setItem('tutorialShown', 'true');
+    }
+};
+&lt;/script&gt;</code></pre>
+        </div>
+        <p>The JavaScript code handles the game logic, including drawing the snake and food, changing the snake's direction, and detecting collisions. Here's a breakdown of the key functions:</p>
+        <ul>
+            <li><code>changeDirection(event)</code>: Changes the snake's direction based on keyboard input or mouse clicks.</li>
+            <li><code>draw()</code>: Draws the snake and food on the SVG canvas and updates the snake's position.</li>
+            <li><code>collision(head, array)</code>: Checks if the snake's head collides with any part of its body.</li>
+            <li><code>startGame()</code>: Initializes the game state and starts the game loop.</li>
+            <li><code>showTutorial()</code>: Displays the tutorial modal.</li>
+            <li><code>window.onload</code>: Shows the tutorial modal on the first page load.</li>
+        </ul>
+    </div>
+</body>
+</html>
