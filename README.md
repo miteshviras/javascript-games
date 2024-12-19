@@ -6,6 +6,9 @@ This is a simple Snake Game implemented using HTML, CSS, and JavaScript.
 
 **Mitesh Viras** - [GitHub](https://github.com/miteshviras)
 
+[Play Game](https://miteshviras.github.io/snake-game-javascript/snake-game.html)  
+[Visit Documentation](https://miteshviras.github.io/snake-game-javascript/documentation.html)
+
 ## How to Play
 
 1. Use the arrow keys to move the snake.
