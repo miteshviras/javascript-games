@@ -1,10 +1,10 @@
-# Snake Game
+# 🐍 Snake Game
 
 This is a simple Snake Game implemented using HTML, CSS, and JavaScript.
 
 ## Author
 
-Mitesh Viras - [GitHub](https://github.com/miteshviras)
+**Mitesh Viras** - [GitHub](https://github.com/miteshviras)
 
 ## How to Play
 
@@ -15,14 +15,14 @@ Mitesh Viras - [GitHub](https://github.com/miteshviras)
 ## How to Run
 
 1. Open the `snake-game.html` file in your web browser.
-2. Click the "Start Game" button to begin playing.
-3. Click the "Tutorial" button to view the instructions on how to play.
+2. Click the **Start Game** button to begin playing.
+3. Click the **Tutorial** button to view the instructions on how to play.
 
 ## Features
 
-- Simple and intuitive controls using the arrow keys.
-- Score tracking and high score saving using local storage.
-- Tutorial modal to help new players understand the game.
+- 🎮 Simple and intuitive controls using the arrow keys.
+- 📈 Score tracking and high score saving using local storage.
+- 📚 Tutorial modal to help new players understand the game.
 
 ## Dependencies
 
@@ -37,4 +37,9 @@ This project is licensed under the MIT License.
 
 ## Support
 
-If you like this project, consider buying me a coffee: [Buy Me a Coffee](https://buymeacoffee.com/miteshviras329)
+If you like this project, consider buying me a coffee: 
+[![Buy Me a Coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://buymeacoffee.com/miteshviras329)
+
+---
+
+Made with ❤️ by Mitesh Viras
